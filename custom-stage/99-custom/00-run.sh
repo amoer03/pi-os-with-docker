@@ -1,0 +1,11 @@
+source 01-hostname.sh
+source 02-default-hostname.sh
+source 03-timezone.sh
+source 04-install-ssh-id.sh
+source 05-enable-xrdp.sh
+source 06-docker.sh
+source 07-network.sh
+source 08-usb-id-udev.sh
+source 09-ntp.sh
+source 10-sudoers.sh
+source 11-firstboot.sh

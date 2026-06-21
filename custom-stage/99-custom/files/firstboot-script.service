@@ -1,0 +1,13 @@
+[Unit]
+Description=Run firstboot.sh from boot partition once
+After=local-fs.target
+ConditionPathExists=/boot/firmware/firstboot.sh
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /boot/firmware/firstboot.sh
+ExecStartPost=/bin/rm -f /boot/firmware/firstboot.sh
+
+[Install]
+WantedBy=multi-user.target
+

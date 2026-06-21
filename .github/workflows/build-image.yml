@@ -1,0 +1,52 @@
+name: Build Raspberry Pi OS aarch64 image
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image with pi-gen
+        uses: usimd/pi-gen-action@v1
+        id: build
+        with:
+          image-name: testsys-rpi
+          release: trixie
+          verbose-output: true
+          extra-host-dependencies: git
+          enable-ssh: 1
+          compression: none
+          enable-cloud-init: 0
+          disable-first-boot-user-rename: 1
+          github-token: ${{ github.token }}
+          locale: en_GB.UTF-8
+          #timezone: Europe/Copenhagen (no tzdata)
+          keyboard-keymap: dk
+          keyboard-layout: Danish
+          pi-gen-repository: RPi-Distro/pi-gen
+          #increase-runner-disk-size: true
+          pi-gen-release: "[and-rs.dk] Alternative Pi OS Remix"
+          pi-gen-version: 2026-04-13-raspios-trixie-arm64
+          stage-list: stage0 stage1 stage2 stage3 ./custom-stage
+          #wpa-country: dk
+          username: test
+          password: test
+
+      - name: Discover output path
+        id: meta
+        run: |
+          echo "image-path=$(find . -name '*.img' -o -name '*.zip' | head -n 1)" >> $GITHUB_OUTPUT
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: testsys-rpi
+          path: ${{ steps.build.outputs.image-path }}
+          #path: ${{ steps.meta.outputs.image-path }}

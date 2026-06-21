@@ -1,0 +1,12 @@
+[Unit]
+Description=Install SSH key from boot partition on first boot
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/install-ssh-key.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+

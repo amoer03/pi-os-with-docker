@@ -1,0 +1,13 @@
+[Unit]
+Description=Set hostname from boot partition once
+After=local-fs.target
+ConditionPathExists=/boot/firmware/hostname
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/boot-hostname.sh
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+
